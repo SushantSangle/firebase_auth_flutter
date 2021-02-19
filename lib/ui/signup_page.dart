@@ -104,57 +104,60 @@ class SignupPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                TextFieldBox(
-                  labelText: 'Enter display name',
-                  textValidator: (str) => Validator.name(str) ,
-                  controller: username,
-                ),
-                TextFieldBox(
-                  labelText: 'Enter email address',
-                  textValidator: (str) => _validateEmail(str) ,
-                  controller: email,
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                TextFieldBox(
-                  labelText: 'Enter password',
-                  obscureText: true,
-                  textValidator: (str) => Validator.password(str),
-                  controller: password,
-                ),
-                TextFieldBox(
-                  labelText: 'Re-enter password',
-                  obscureText: true,
-                  textValidator: (str) => str == password.text ? null: 'passwords don\'t match' ,
-                  controller: passwordRecheck,
-                ),
-                TextFieldBox(
-                  labelText: 'Enter phone number',
-                  textValidator: (str) => Validator.number(str) ,
-                  controller: phoneNo,
-                  keyboardType: TextInputType.number,
-                ),
-                TextFieldBox(
-                  labelText: 'Enter Address',
-                  textValidator: (str) => str.length > 0 ? null : 'Address cannot be empty' ,
-                  maxLines: 4,
-                  controller: address,
-                  keyboardType: TextInputType.multiline,
-                ),
-                TextFieldBox(
-                  labelText: 'Enter Company name',
-                  textValidator: (str) => str.length > 0 ? null : 'Company cannot be empty' ,
-                  controller: company,
-                  keyboardType: TextInputType.text,
-                ),
-              ],
+      body: GestureDetector(
+        onTap : () => FocusScope.of(context).requestFocus(FocusNode()),
+        child: Center(
+          child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  TextFieldBox(
+                    labelText: 'Enter display name',
+                    textValidator: (str) => Validator.name(str) ,
+                    controller: username,
+                  ),
+                  TextFieldBox(
+                    labelText: 'Enter email address',
+                    textValidator: (str) => _validateEmail(str) ,
+                    controller: email,
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                  TextFieldBox(
+                    labelText: 'Enter password',
+                    obscureText: true,
+                    textValidator: (str) => Validator.password(str),
+                    controller: password,
+                  ),
+                  TextFieldBox(
+                    labelText: 'Re-enter password',
+                    obscureText: true,
+                    textValidator: (str) => str == password.text ? null: 'passwords don\'t match' ,
+                    controller: passwordRecheck,
+                  ),
+                  TextFieldBox(
+                    labelText: 'Enter phone number',
+                    textValidator: (str) => Validator.number(str) ,
+                    controller: phoneNo,
+                    keyboardType: TextInputType.number,
+                  ),
+                  TextFieldBox(
+                    labelText: 'Enter Address',
+                    textValidator: (str) => str.length > 0 ? null : 'Address cannot be empty' ,
+                    maxLines: 4,
+                    controller: address,
+                    keyboardType: TextInputType.multiline,
+                  ),
+                  TextFieldBox(
+                    labelText: 'Enter Company name',
+                    textValidator: (str) => str.length > 0 ? null : 'Company cannot be empty' ,
+                    controller: company,
+                    keyboardType: TextInputType.text,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

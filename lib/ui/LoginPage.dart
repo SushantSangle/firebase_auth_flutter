@@ -21,150 +21,168 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  FocusNode focusNode;
   TextEditingController username = TextEditingController();
   TextEditingController password = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  
+  @override
+  void initState() {
+    super.initState();
+    focusNode = FocusNode();
+  }
+  
+  @override
+  void dispose(){
+    super.dispose();
+    focusNode.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: Text(
-                        'Flutter Firebase Auth Demo',
-                        style: Theme.of(context).textTheme.headline2.copyWith(fontFamily: 'Nunito'),
-                      )
-                    ),
-                    TextFieldBox(
-                      labelText: 'email',
-                      controller: username,
-                      keyboardType: TextInputType.emailAddress,
-                      textValidator: (str) => Validator.email(str)
-                    ),
-                    TextFieldBox(
-                      labelText: 'Password',
-                      controller: password,
-                      obscureText: true,
-                      textValidator: (str) => Validator.password(str),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      height: 50,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                        child: ChangeNotifierProvider(
-                          create: (context) =>LoadingNotifier(),
-                          child: Consumer<LoadingNotifier>(
-                            builder: (context,notifier,child) => TextButton(
-                              style: ButtonStyle(
-                                overlayColor: MaterialStateProperty.all<Color>(Colors.blue[600]),
-                                shape: MaterialStateProperty.all<OutlinedBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+          child: GestureDetector(
+            onTap: () => FocusScope.of(context).requestFocus(focusNode),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        child: Text(
+                          'Flutter Firebase Auth Demo',
+                          style: Theme.of(context).textTheme.headline2.copyWith(fontFamily: 'Nunito'),
+                        )
+                      ),
+                      TextFieldBox(
+                        labelText: 'email',
+                        controller: username,
+                        keyboardType: TextInputType.emailAddress,
+                        textValidator: (str) => Validator.email(str)
+                      ),
+                      TextFieldBox(
+                        labelText: 'Password',
+                        controller: password,
+                        obscureText: true,
+                        textValidator: (str) => Validator.password(str),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        height: 50,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                          child: ChangeNotifierProvider(
+                            create: (context) =>LoadingNotifier(),
+                            child: Consumer<LoadingNotifier>(
+                              builder: (context,notifier,child) => TextButton(
+                                style: ButtonStyle(
+                                  overlayColor: MaterialStateProperty.all<Color>(Colors.blue[600]),
+                                  shape: MaterialStateProperty.all<OutlinedBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              onPressed: () async {
-                                if(_formKey.currentState.validate()) {
-                                  try {
-                                    await notifier.setLoading(FirebaseHelper.signIn(email: username.text,
-                                        password: password.text));
-                                    username.text = '';
-                                    password.text = '';
-                                  }on FirebaseException catch(e){
-                                    print(e.toString());
-                                    print(e.code);
-                                    switch(e.code){
-                                      case 'unknown':
-                                        SimpleDialogueBox(title: 'Connectivity issue',
-                                            description: 'Please check your internet connection')
-                                            .show(context);
-                                        break;
-                                      case 'user-not-found':
-                                        SimpleDialogueBox(title: 'New user?',
-                                            description: 'There is no user registered by this email address please click on signup to create a new account')
-                                            .show(context);
-                                        break;
-                                      case 'wrong-password':
-                                        SimpleDialogueBox(title: 'Invalid details',
-                                            description: 'The details you have entered are incorrect')
-                                            .show(context);
-                                    }
-                                  }
-                                }
-                              },
-                              child: Center(
-                                child: notifier.loadingState ? CircularProgressIndicator(
-                                  backgroundColor: Colors.white,
-                                ): Text(
-                                  'login',
-                                  style: TextStyle(
-                                    color: Colors.white,
+                                onPressed: () => login(notifier),
+                                child: Center(
+                                  child: notifier.loadingState ? CircularProgressIndicator(
+                                    backgroundColor: Colors.white,
+                                  ): Text(
+                                    'login',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                    textScaleFactor: 1.61,
                                   ),
-                                  textAlign: TextAlign.center,
-                                  textScaleFactor: 1.61,
                                 ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: oAuthEnabled()..addAll([
-                    Divider(
-                      thickness: 2,
-                    ),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                         'Not signed up yet?'
-                          ),
-                          TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return SignupPage();
-                                      }
-                                    )
-                                );
-                              },
-                              child: Text(
-                                'Sign up!'
-                              )
-                          ),
-                        ]
-                    ),
-                  ]),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: oAuthEnabled()..addAll([
+                      Divider(
+                        thickness: 2,
+                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                           'Not signed up yet?'
+                            ),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return SignupPage();
+                                        }
+                                      )
+                                  );
+                                },
+                                child: Text(
+                                  'Sign up!'
+                                )
+                            ),
+                          ]
+                      ),
+                    ]),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+  void login(notifier) async {
+    FocusScope.of(context).requestFocus(focusNode);
+    if(_formKey.currentState.validate()) {
+      try {
+        await notifier.setLoading(FirebaseHelper.signIn(email: username.text,
+            password: password.text));
+        username.text = '';
+        password.text = '';
+      }on FirebaseException catch(e){
+        print(e.toString());
+        print(e.code);
+        switch(e.code){
+          case 'unknown':
+            SimpleDialogueBox(title: 'Connectivity issue',
+                description: 'Please check your internet connection')
+                .show(context);
+            break;
+          case 'user-not-found':
+            SimpleDialogueBox(title: 'New user?',
+                description: 'There is no user registered by this email address please click on signup to create a new account')
+                .show(context);
+            break;
+          case 'wrong-password':
+            SimpleDialogueBox(title: 'Invalid details',
+                description: 'The details you have entered are incorrect')
+                .show(context);
+        }
+      }
+    }
   }
 
   List<Widget> oAuthEnabled({enabled = false}){

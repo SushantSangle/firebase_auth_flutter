@@ -78,7 +78,6 @@ class FirebaseHelper {
       );
     }catch(e){
       print(e);
-      throw e;
     }
   }
 
