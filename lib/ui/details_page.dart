@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth_flutter/util/firebase_helper.dart';
 import 'package:flutter/rendering.dart';
 import 'package:firebase_auth_flutter/common_components/info_field.dart';
+import 'package:firebase_auth_flutter/ui/home_page.dart';
+import 'package:firebase_auth_flutter/common_components/application_drawer.dart';
 
-class DetailPage extends StatefulWidget {
+class DetailsPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _DetailPageState();
 }
 
-class _DetailPageState extends State<DetailPage> {
+class _DetailPageState extends State<DetailsPage> {
   Future infoFuture;
 
   @override
@@ -21,6 +23,7 @@ class _DetailPageState extends State<DetailPage> {
     var height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.blue,
+      drawer: AppDrawer(),
       appBar: AppBar(
         title: Text('User Info'),
         elevation: 0,
@@ -40,7 +43,6 @@ class _DetailPageState extends State<DetailPage> {
         ],
       ),
       body: Container(
-        width: MediaQuery.of(context).size.width,
         child: FutureBuilder(
           future: infoFuture,
           builder:(context,snapshot) {
@@ -74,9 +76,10 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                         Expanded(
                           child: Container(
+                            width: MediaQuery.of(context).size.width,
                             padding: EdgeInsets.all(10),
                             child: Text(
-                              snapshot.data['displayName'],
+                              snapshot.data['displayName'] ?? '',
                               style: Theme.of(context).textTheme.headline4.copyWith(
                                 fontFamily: 'Nunito',
                                 color: Colors.white,
@@ -129,7 +132,12 @@ class _DetailPageState extends State<DetailPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
-        onPressed: () {  },
+        onPressed: () {
+          final route = MaterialPageRoute(
+            builder: (context) => HomePage(),
+          );
+          Navigator.pushReplacement(context, route);
+        },
         child: Icon(
           Icons.edit,
         ),

@@ -1,10 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_auth_flutter/ui/details_page.dart';
+import 'package:firebase_auth_flutter/ui/home_page.dart';
 import 'package:flutter/material.dart';
 import 'LoginPage.dart';
 import 'package:firebase_auth_flutter/util/firebase_helper.dart';
-import 'package:firebase_auth_flutter/ui/details_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class LoadingPage extends StatelessWidget {
   @override
@@ -54,8 +51,7 @@ class LoadingPage extends StatelessWidget {
                 if(snapshot.data == null){
                   return LoginPage(connectionState);
                 }else{
-                  User user = snapshot.data;
-                  return DetailPage();
+                  return HomePage();
                 }
                 break;
             }
