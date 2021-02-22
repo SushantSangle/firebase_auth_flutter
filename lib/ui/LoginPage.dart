@@ -1,4 +1,5 @@
 import 'package:firebase_auth_flutter/common_components/simple_dialogue_box.dart';
+import 'package:firebase_auth_flutter/ui/home_page.dart';
 import 'package:firebase_auth_flutter/util/firebase_helper.dart';
 import 'package:firebase_auth_flutter/util/loading_notifier.dart';
 import 'package:flutter/cupertino.dart';
@@ -89,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                   ),
                                 ),
-                                onPressed: () => login(notifier),
+                                onPressed: () => login(context,notifier),
                                 child: Center(
                                   child: notifier.loadingState ? CircularProgressIndicator(
                                     backgroundColor: Colors.white,
@@ -151,12 +152,20 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-  void login(notifier) async {
+  void login(context,notifier) async {
     FocusScope.of(context).requestFocus(FocusNode());
     if(_formKey.currentState.validate()) {
       try {
         await notifier.setLoading(FirebaseHelper.signIn(email: username.text,
             password: password.text));
+        if(FirebaseHelper.currentUser != null){
+          Navigator.pushReplacement(context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => HomePage(),
+            )
+          );
+          return;
+        }
         username.text = '';
         password.text = '';
       }on FirebaseException catch(e){

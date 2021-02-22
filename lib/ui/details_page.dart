@@ -1,10 +1,10 @@
 import 'package:firebase_auth_flutter/common_components/text_field_box.dart';
+import 'package:firebase_auth_flutter/util/loading_notifier.dart';
 import 'package:firebase_auth_flutter/util/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth_flutter/util/firebase_helper.dart';
 import 'package:flutter/rendering.dart';
-import 'package:firebase_auth_flutter/common_components/info_field.dart';
-import 'package:firebase_auth_flutter/ui/home_page.dart';
+import 'package:provider/provider.dart';
 import 'package:firebase_auth_flutter/common_components/application_drawer.dart';
 
 class DetailsPage extends StatefulWidget {
@@ -42,11 +42,13 @@ class _DetailPageState extends State<DetailsPage> {
     infoFuture   = FirebaseHelper.getCurrentUserDetails();
     try{
       var data = await infoFuture;
-      name.text = data['displayName'];
-      company.text = data['company'];
-      email.text = data['email'];
-      phone.text = data['phone'];
-      address.text = data['address'];
+      this.setState(() {
+        name.text = data['displayName'];
+        company.text = data['company'];
+        email.text = data['email'];
+        phone.text = data['phone'];
+        address.text = data['address'];
+      });
     }catch(e){
 
     }
@@ -68,19 +70,36 @@ class _DetailPageState extends State<DetailsPage> {
         child:body(height,width),
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
-        onPressed: () {
-          this.setState(() {
-            this.editMode = !this.editMode;
-          });
-        },
-        child: this.editMode ? Icon(
-          Icons.save
-        ) :
-        Icon(
-          Icons.edit,
+      floatingActionButton: ChangeNotifierProvider<LoadingNotifier>(
+        create: (BuildContext context) => LoadingNotifier(),
+        child: Consumer<LoadingNotifier>(
+          builder: (context,loadingNotifier,child) {
+            return FloatingActionButton(
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
+              onPressed: () async{
+                if(this.editMode){
+                  await loadingNotifier.setLoading(FirebaseHelper.addUserDetails(
+                      phone.text, address.text, company.text, name.text,
+                      FirebaseHelper.currentUser));
+                  assignValues();
+                }
+                this.setState(() {
+                  this.editMode = !this.editMode;
+                });
+              },
+              child: this.editMode ? loadingNotifier.loadingState ?
+                CircularProgressIndicator(
+                  backgroundColor: Colors.white,
+                ) :
+                Icon(
+                  Icons.save
+                ) :
+                Icon(
+                  Icons.edit,
+                ),
+            );
+          },
         ),
       ),
     );
@@ -151,6 +170,7 @@ class _DetailPageState extends State<DetailsPage> {
                   disabled: !this.editMode,
                   textValidator: Validator.number,
                   width: width,
+                  keyboardType: TextInputType.phone,
                 ),
                 TextFieldBox(
                   labelText: 'Address',

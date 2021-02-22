@@ -65,11 +65,6 @@ class AppDrawer extends StatelessWidget {
             icon: Icons.logout,
             onPressed: () async {
               await FirebaseHelper.signOut();
-              Navigator.popUntil(context, (route) {
-                if(!route.hasActiveRouteBelow)
-                  return true;
-                return false;
-              });
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(

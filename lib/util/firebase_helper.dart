@@ -26,7 +26,7 @@ class FirebaseHelper {
     return FirebaseAuth.instance.userChanges();
   }
 
-  static get currentUser{
+  static User get currentUser{
     return FirebaseAuth.instance.currentUser;
   }
 
@@ -46,8 +46,7 @@ class FirebaseHelper {
     try{
       var userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
       var currentUser = userCredential.user;
-      await currentUser.updateProfile(displayName: displayName);
-      addUserDetails(phoneNo,address,company,currentUser);
+      addUserDetails(phoneNo,address,company,displayName,currentUser);
       _credential = userCredential;
       return _credential;
     }catch(e){
@@ -55,12 +54,13 @@ class FirebaseHelper {
     }
   }
 
-  static Future addUserDetails(String phoneNo,String address, String company,User user){
+  static Future addUserDetails(String phoneNo,String address, String company,String displayName,User user) async{
     CollectionReference userInfo = FirebaseFirestore.instance.collection('userInfo');
-    userInfo.doc(user.uid).set({
-        "phone" : phoneNo,
-        "address" : address,
-        "company" : company,
+    await currentUser.updateProfile(displayName: displayName ?? '');
+    await userInfo.doc(user.uid).set({
+        "phone" : phoneNo ?? '',
+        "address" : address ?? '',
+        "company" : company ?? '',
       },
     );
   }
