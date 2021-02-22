@@ -3,12 +3,12 @@ import 'package:firebase_auth_flutter/util/firebase_helper.dart';
 import 'package:flutter/rendering.dart';
 import 'package:firebase_auth_flutter/common_components/info_field.dart';
 
-class InfoPage extends StatefulWidget {
+class DetailPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _InfoPageState();
+  State<StatefulWidget> createState() => _DetailPageState();
 }
 
-class _InfoPageState extends State<InfoPage> {
+class _DetailPageState extends State<DetailPage> {
   Future infoFuture;
 
   @override

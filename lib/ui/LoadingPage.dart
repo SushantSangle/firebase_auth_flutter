@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_auth_flutter/ui/info_page.dart';
+import 'package:firebase_auth_flutter/ui/details_page.dart';
 import 'package:flutter/material.dart';
 import 'LoginPage.dart';
 import 'package:firebase_auth_flutter/util/firebase_helper.dart';
-import 'package:firebase_auth_flutter/ui/info_page.dart';
+import 'package:firebase_auth_flutter/ui/details_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoadingPage extends StatelessWidget {
@@ -55,7 +55,7 @@ class LoadingPage extends StatelessWidget {
                   return LoginPage(connectionState);
                 }else{
                   User user = snapshot.data;
-                  return InfoPage();
+                  return DetailPage();
                 }
                 break;
             }
