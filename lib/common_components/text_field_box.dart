@@ -7,17 +7,29 @@ class TextFieldBox extends StatelessWidget{
   TextInputType keyboardType;
   bool obscureText;
   int maxLines;
-  TextFieldBox({this.labelText,this.controller,this.textValidator,this.obscureText = false, this.keyboardType = TextInputType.name,this.maxLines = 1});
+  bool disabled;
+  double width;
+  TextFieldBox({this.labelText,
+    this.controller,
+    this.textValidator,
+    this.obscureText = false,
+    this.keyboardType = TextInputType.name,
+    this.maxLines = 1,
+    this.disabled = false,
+    this.width,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(10),
       child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.8,
+        width: width ?? MediaQuery.of(context).size.width * 0.8,
         child: TextFormField(
+            enabled: !disabled,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             maxLines: this.maxLines,
+            readOnly: disabled,
             controller: this.controller,
             obscureText: this.obscureText,
             validator: this.textValidator,
