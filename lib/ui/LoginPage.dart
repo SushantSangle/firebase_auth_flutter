@@ -21,7 +21,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  FocusNode focusNode;
   TextEditingController username = TextEditingController();
   TextEditingController password = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -29,13 +28,11 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    focusNode = FocusNode();
   }
   
   @override
   void dispose(){
     super.dispose();
-    focusNode.dispose();
   }
 
   @override
@@ -44,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
       body: Center(
         child: SingleChildScrollView(
           child: GestureDetector(
-            onTap: () => FocusScope.of(context).requestFocus(focusNode),
+            onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -155,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
   void login(notifier) async {
-    FocusScope.of(context).requestFocus(focusNode);
+    FocusScope.of(context).requestFocus(FocusNode());
     if(_formKey.currentState.validate()) {
       try {
         await notifier.setLoading(FirebaseHelper.signIn(email: username.text,

@@ -7,10 +7,7 @@ class HomePage extends StatelessWidget {
   @override
   build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        semanticLabel: 'App Drawer',
-        child: AppDrawer(),
-      ),
+      drawer: AppDrawer(),
       appBar: AppBar(
         title: Text('Home page'),
         elevation: 0,
