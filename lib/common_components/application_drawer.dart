@@ -3,6 +3,7 @@ import 'package:firebase_auth_flutter/util/firebase_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth_flutter/ui/home_page.dart';
 import 'package:firebase_auth_flutter/ui/details_page.dart';
+import 'package:firebase_auth_flutter/ui/lisense_view.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -47,8 +48,15 @@ class AppDrawer extends StatelessWidget {
                       ),
                       Divider(thickness: 2),
                       drawerEntry(
-                        context,title:'Details',
-                        icon:Icons.description,
+                        context,
+                        title: 'License',
+                        icon: Icons.description,
+                        pageConstructor: LicenseView(),
+                      ),
+                      Divider(thickness: 2),
+                      drawerEntry(
+                        context,title:'Personal info',
+                        icon:Icons.person,
                         pageConstructor: DetailsPage(),
                       ),
                       Divider(thickness: 2),
