@@ -6,9 +6,18 @@ import 'package:firebase_auth_flutter/util/firebase_helper.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth_flutter/util/loading_notifier.dart';
 
+class SignupPage extends StatefulWidget {
+  Function loginCallback;
+  SignupPage.withCallBack(this.loginCallback);
+  @override
+  State<SignupPage> createState() => SignupPageState.withCallBack(loginCallback);
 
-class SignupPage extends StatelessWidget {
+}
 
+class SignupPageState extends State<SignupPage> {
+
+  SignupPageState.withCallBack(this.loginCallback);
+  Function loginCallback;
   TextEditingController username = new TextEditingController();
   TextEditingController password = new TextEditingController();
   TextEditingController address = new TextEditingController();
@@ -16,17 +25,85 @@ class SignupPage extends StatelessWidget {
   TextEditingController email = new TextEditingController();
   TextEditingController passwordRecheck = new TextEditingController();
   TextEditingController phoneNo = new TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+  final _mainFormKey = GlobalKey<FormState>();
+  final _optFormKey = GlobalKey<FormState>();
   bool _uniqueEmail = true;
+  int _currentStep = 0;
+  String prevEmail = '';
+
+  @override
+  initState(){
+    _currentStep = 0;
+    super.initState();
+  }
+
 
   String _validateEmail(String email){
     var str = Validator.email(email);
     if (str != null)
       return str;
-    if( _uniqueEmail == false){
+    if( _uniqueEmail == false || prevEmail == email){
+      prevEmail = email;
+      _uniqueEmail = true;
       return 'email already in use';
     }
     return null;
+  }
+
+  static looseFocus(context) =>
+    FocusScope.of(context).hasPrimaryFocus ?
+      null :
+      FocusManager.instance.primaryFocus.unfocus();
+
+  _stepTapped(step) {
+    looseFocus(context);
+    if(_currentStep == 1)
+      this.setState(() => _currentStep = step) ;
+  }
+
+  _stepContinue([LoadingNotifier notifier]) async{
+    print(this._currentStep);
+    if(this._currentStep  < 1){
+      if(_mainFormKey.currentState.validate())
+        this.setState(() {
+          this._currentStep+=1;
+        });
+      return;
+    }
+    if(notifier != null)
+      return _signUp(notifier);
+  }
+
+  _stepCancel([LoadingNotifier notifier]) async{
+    if(notifier != null)
+      return _signUp(notifier,true);
+  }
+
+  _signUp(LoadingNotifier notifier,[skipped = false]) async{
+    try {
+      if (_optFormKey.currentState.validate()) {
+        notifier.setLoading(FirebaseHelper.signUp(
+          displayName: !skipped ? username.text ?? '' : '',
+          email: email.text,
+          password: password.text,
+          phoneNo: !skipped ? phoneNo.text ?? '' : '',
+          company: !skipped ? company.text ?? '' : '',
+          address: !skipped ? company.text ?? '' : '',
+        ),
+          onFinished: () {
+            Navigator.pop(context);
+            loginCallback();
+          }
+        );
+      }
+    }catch(e){
+      if(e.code.toString() == 'email-already-in-use'){
+        _uniqueEmail = false;
+        _mainFormKey.currentState.validate();
+        this.setState(() => _currentStep = 0 );
+      }
+    }
+    return;
   }
 
   @override
@@ -43,126 +120,136 @@ class SignupPage extends StatelessWidget {
               color: Colors.white,
             )
         ),
-        actions: [
-          ChangeNotifierProvider(
-            create: (BuildContext context) => LoadingNotifier(),
-            child: Consumer<LoadingNotifier>(
-             builder: (context,notifier,child) {
-               return TextButton(
-                 style: ButtonStyle(
-                   overlayColor: MaterialStateProperty.all<Color>(Colors.blue[600]),
-                   shape: MaterialStateProperty.all<OutlinedBorder>(
-                     RoundedRectangleBorder(
-                       borderRadius: BorderRadius.all(Radius.circular(10)),
-                     ),
-                   ),
-                 ),
-                 onPressed: () async {
-                   if(_formKey.currentState.validate()) {
-                     try{
-                       await notifier.setLoading(FirebaseHelper.signUp(
-                         displayName: username.text,
-                         email: email.text,
-                         password: password.text,
-                         phoneNo: phoneNo.text,
-                         address: address.text,
-                         company: company.text,
-                       ));
-                       Navigator.pop(context);
-                     }catch(e){
-                       print(e);
-                       print(e.code);
-                       switch(e.code){
-                         case 'email-already-in-use':
-                           _uniqueEmail = false;
-                           _formKey.currentState.validate();
-                           _uniqueEmail = true;
-                           break;
-                         case 'unknown':
-                           SimpleDialogueBox(title: 'Connectivity issue',
-                               description: 'Please check your internet connection')
-                               .show(context);
-                           break;
-                       }
-                     }
-                   }
-                 },
-                 child: Center(
-                   child: notifier.loadingState ? CircularProgressIndicator(
-                     backgroundColor: Colors.white,
-                   ) : Text(
-                     'signup',
-                     style: TextStyle(
-                       color: Colors.white,
-                     ),
-                     textAlign: TextAlign.center,
-                   ),
-                 ),
-               );
-             },
-            )
-          ),
-        ],
       ),
-      body: GestureDetector(
-        onTap : () => FocusScope.of(context).requestFocus(FocusNode()),
-        child: Center(
-          child: Form(
-            key: _formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  TextFieldBox(
-                    labelText: 'Enter display name',
-                    textValidator: (str) => Validator.name(str) ,
-                    controller: username,
-                  ),
-                  TextFieldBox(
-                    labelText: 'Enter email address',
-                    textValidator: (str) => _validateEmail(str) ,
-                    controller: email,
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  TextFieldBox(
-                    labelText: 'Enter password',
-                    obscureText: true,
-                    textValidator: (str) => Validator.password(str),
-                    controller: password,
-                  ),
-                  TextFieldBox(
-                    labelText: 'Re-enter password',
-                    obscureText: true,
-                    textValidator: (str) => str == password.text ? null: 'passwords don\'t match' ,
-                    controller: passwordRecheck,
-                  ),
-                  TextFieldBox(
-                    labelText: 'Enter phone number',
-                    textValidator: (str) => Validator.number(str) ,
-                    controller: phoneNo,
-                    keyboardType: TextInputType.number,
-                  ),
-                  TextFieldBox(
-                    labelText: 'Enter Address',
-                    textValidator: (str) => str.length > 0 ? null : 'Address cannot be empty' ,
-                    maxLines: 4,
-                    controller: address,
-                    keyboardType: TextInputType.multiline,
-                  ),
-                  TextFieldBox(
-                    labelText: 'Enter Company name',
-                    textValidator: (str) => str.length > 0 ? null : 'Company cannot be empty' ,
-                    controller: company,
-                    keyboardType: TextInputType.text,
-                  ),
-                ],
+      body: SingleChildScrollView(
+        child: Stepper(
+          onStepTapped: (step) => _stepTapped(step),
+          onStepContinue: _stepContinue,
+          onStepCancel: _stepCancel,
+          physics: ScrollPhysics(),
+          type: StepperType.vertical,
+          currentStep: this._currentStep,
+          controlsBuilder: _stepperControlBuilder,
+          steps: [
+            _necessaryDetails(context),
+            _extraDetails(context),
+          ],
+
+
+        ),
+      ),
+    );
+  }
+  
+  Widget _stepperControlBuilder(context,{onStepCancel,onStepContinue}) {
+    return ChangeNotifierProvider(
+      create: (BuildContext context) => LoadingNotifier(),
+      child: Consumer<LoadingNotifier>(
+        builder: (context,notifier,child) => notifier.loadingState ? CircularProgressIndicator() : Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.all(10),
+              child: ElevatedButton(
+                onPressed: () {
+                  looseFocus(context);
+                  _stepContinue(notifier);
+                },
+                child:Row(
+                  children: [
+                    Text( this._currentStep == 0 ? 'Next' : 'Sign up' ),
+                    _currentStep == 0 ? Icon(Icons.arrow_forward) : Container(),
+                  ],
+                ),
+                style: ButtonStyle(
+                    shape: MaterialStateProperty.all<OutlinedBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        )
+                    )
+                ),
               ),
             ),
-          ),
+            this._currentStep == 1 ? Container(
+                padding: EdgeInsets.all(10),
+                child: TextButton(
+                  onPressed: () {
+                    looseFocus(context);
+                    _stepCancel(notifier);
+                  },
+                  child: Text('Skip details'),
+                )
+            ) : Container(),
+          ],
         ),
       ),
     );
   }
 
+  _necessaryDetails(context) => Step(
+    title: Text('Authentication'),
+    content: Form(
+      key: _mainFormKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          TextFieldBox(
+            labelText: 'Enter e-mail*',
+            textValidator: _validateEmail,
+            controller: email,
+          ),
+          TextFieldBox(
+            labelText: 'Enter password*',
+            textValidator: Validator.password,
+            controller: password,
+            obscureText: true,
+          ),
+          TextFieldBox(
+            labelText: 'Re-enter password*',
+            textValidator: (str) => str == password.text ? null : 'Passwords don\'t match',
+            controller: passwordRecheck,
+            obscureText: true,
+          ),
+        ],
+      ),
+    ),
+  );
+
+  _extraDetails(context) => Step(
+    title: Text(
+      'Optional details',
+    ),
+    content: Form(
+      key: _optFormKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          TextFieldBox(
+            labelText: 'Name',
+            controller: username,
+            keyboardType: TextInputType.name,
+          ),
+          TextFieldBox(
+            labelText: 'Phone number',
+            controller: phoneNo,
+            keyboardType: TextInputType.phone,
+            textValidator:(str) => phoneNo.text == '' ? null : Validator.number(str) ,
+          ),
+          TextFieldBox(
+            labelText: 'Residential address',
+            controller: address,
+            keyboardType: TextInputType.streetAddress,
+            maxLines: 3,
+          ),
+          TextFieldBox(
+            labelText: 'Company',
+            controller: company,
+            keyboardType: TextInputType.name,
+          )
+        ],
+      )
+    ),
+  );
 }

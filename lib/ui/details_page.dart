@@ -66,10 +66,7 @@ class _DetailPageState extends State<DetailsPage> {
         title: Text('User Info'),
         elevation: 0,
       ),
-      body: GestureDetector(
-        child:body(height,width),
-        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-      ),
+      body: body(height,width),
       floatingActionButton: ChangeNotifierProvider<LoadingNotifier>(
         create: (BuildContext context) => LoadingNotifier(),
         child: Consumer<LoadingNotifier>(
@@ -110,7 +107,7 @@ class _DetailPageState extends State<DetailsPage> {
     children: [
       Container(
         constraints: BoxConstraints(
-          minHeight: height / (1.61*1.61*1.61),
+          minHeight: height / (1.61*1.61*1.61*1.61),
         ),
         decoration: BoxDecoration(
           color: Colors.blue,
@@ -131,20 +128,6 @@ class _DetailPageState extends State<DetailsPage> {
                     ]
                 ),
               ),
-              Expanded(
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.all(10),
-                  child: Text(
-                    this.email.text,
-                    style: Theme.of(context).textTheme.headline4.copyWith(
-                      fontFamily: 'Nunito',
-                      color: Colors.white,
-                    ),
-                    softWrap: true,
-                  ),
-                ),
-              )
             ]
         ),
       ),
@@ -157,19 +140,26 @@ class _DetailPageState extends State<DetailsPage> {
           ),
           child: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                TextFieldBox(
+                  labelText: 'email',
+                  controller: email,
+                  disabled: true,
+                  width: width - 20,
+                ),
                 TextFieldBox(
                   labelText: 'name',
                   controller: this.name,
                   disabled: !this.editMode,
-                  width: width,
+                  width: width - 20,
                 ),
                 TextFieldBox(
                   labelText: 'phone number',
                   controller: this.phone,
                   disabled: !this.editMode,
                   textValidator: Validator.number,
-                  width: width,
+                  width: width - 20,
                   keyboardType: TextInputType.phone,
                 ),
                 TextFieldBox(
@@ -177,13 +167,13 @@ class _DetailPageState extends State<DetailsPage> {
                   controller: this.address,
                   disabled: !this.editMode,
                   maxLines: 3,
-                  width: width,
+                  width: width - 20,
                 ),
                 TextFieldBox(
                   labelText: 'Company',
                   controller: this.company,
                   disabled: !this.editMode,
-                  width: width,
+                  width: width - 20,
                 ),
               ],
             ),

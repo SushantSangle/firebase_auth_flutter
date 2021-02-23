@@ -8,12 +8,19 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GestureDetector(
+        onTap: () {
+      FocusScopeNode node = FocusScope.of(context);
+      if(!node.hasPrimaryFocus)
+        FocusManager.instance.primaryFocus.unfocus();
+    },
+    child:MaterialApp(
       title: 'Flutter Firebase auth',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: App(),
+    ),
     );
   }
 }
@@ -22,6 +29,7 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LoadingPage();
+    return  LoadingPage();
+
   }
 }

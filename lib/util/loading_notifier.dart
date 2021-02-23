@@ -5,17 +5,21 @@ class LoadingNotifier extends ChangeNotifier {
   bool _loadingState = false;
   bool get loadingState => _loadingState;
 
-  setLoading(Future future) async{
+  setLoading(Future future,{Function onFinished,Function onError}) async{
     _loadingState = true;
     notifyListeners();
     try{
       var result = await future;
       _loadingState = false;
       notifyListeners();
+      if(onFinished != null)
+        onFinished();
       return result;
     }catch(e){
       _loadingState = false;
       notifyListeners();
+      if(onError != null)
+        onError();
       throw e;
     }
   }

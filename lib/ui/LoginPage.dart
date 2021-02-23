@@ -36,117 +36,127 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  void loginCallback(){
+    print('logincallback reached');
+    print(this.toString());
+    if(FirebaseHelper.currentUser != null)
+     Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(),
+        )
+     );
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
-          child: GestureDetector(
-            onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        child: Text(
-                          'Flutter Firebase Auth Demo',
-                          style: Theme.of(context).textTheme.headline2.copyWith(fontFamily: 'Nunito'),
-                        )
-                      ),
-                      TextFieldBox(
-                        labelText: 'email',
-                        controller: username,
-                        keyboardType: TextInputType.emailAddress,
-                        textValidator: (str) => Validator.email(str)
-                      ),
-                      TextFieldBox(
-                        labelText: 'Password',
-                        controller: password,
-                        obscureText: true,
-                        textValidator: (str) => Validator.password(str),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        height: 50,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          child: ChangeNotifierProvider(
-                            create: (context) =>LoadingNotifier(),
-                            child: Consumer<LoadingNotifier>(
-                              builder: (context,notifier,child) => TextButton(
-                                style: ButtonStyle(
-                                  overlayColor: MaterialStateProperty.all<Color>(Colors.blue[600]),
-                                  shape: MaterialStateProperty.all<OutlinedBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: Text(
+                        'Flutter Firebase Auth Demo',
+                        style: Theme.of(context).textTheme.headline2.copyWith(fontFamily: 'Nunito'),
+                      )
+                    ),
+                    TextFieldBox(
+                      labelText: 'email',
+                      controller: username,
+                      keyboardType: TextInputType.emailAddress,
+                      textValidator: (str) => Validator.email(str)
+                    ),
+                    TextFieldBox(
+                      labelText: 'Password',
+                      controller: password,
+                      obscureText: true,
+                      textValidator: (str) => Validator.password(str),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: 50,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: ChangeNotifierProvider(
+                          create: (context) =>LoadingNotifier(),
+                          child: Consumer<LoadingNotifier>(
+                            builder: (context,notifier,child) => TextButton(
+                              style: ButtonStyle(
+                                overlayColor: MaterialStateProperty.all<Color>(Colors.blue[600]),
+                                shape: MaterialStateProperty.all<OutlinedBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(10)),
                                   ),
                                 ),
-                                onPressed: () => login(context,notifier),
-                                child: Center(
-                                  child: notifier.loadingState ? CircularProgressIndicator(
-                                    backgroundColor: Colors.white,
-                                  ): Text(
-                                    'login',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                    textScaleFactor: 1.61,
+                              ),
+                              onPressed: () => login(context,notifier),
+                              child: Center(
+                                child: notifier.loadingState ? CircularProgressIndicator(
+                                  backgroundColor: Colors.white,
+                                ): Text(
+                                  'login',
+                                  style: TextStyle(
+                                    color: Colors.white,
                                   ),
+                                  textAlign: TextAlign.center,
+                                  textScaleFactor: 1.61,
                                 ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: oAuthEnabled()..addAll([
-                      Divider(
-                        thickness: 2,
-                      ),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                           'Not signed up yet?'
-                            ),
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return SignupPage();
-                                        }
-                                      )
-                                  );
-                                },
-                                child: Text(
-                                  'Sign up!'
-                                )
-                            ),
-                          ]
-                      ),
-                    ]),
-                  ),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: oAuthEnabled()..addAll([
+                    Divider(
+                      thickness: 2,
+                    ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                         'Not signed up yet?'
+                          ),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return SignupPage.withCallBack(loginCallback);
+                                      }
+                                    )
+                                );
+                              },
+                              child: Text(
+                                'Sign up!'
+                              )
+                          ),
+                        ]
+                    ),
+                  ]),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
