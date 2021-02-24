@@ -15,18 +15,40 @@ class AppDrawer extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
-          flex: 3,
+          flex: 4,
           child: Container(
               padding: EdgeInsets.all(10),
               color: Colors.blue[600],
               alignment: Alignment.bottomLeft,
-              child: Text(
-                'Firebase X Flutter',
-                style: Theme.of(context).textTheme.headline6.copyWith(
-                  color: Colors.white,
-                  fontFamily: 'Nunito',
-                  fontWeight: FontWeight.bold,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    child: Stack(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.white,
+                            backgroundImage: AssetImage('assets/user.png'),
+                            radius: 30,
+                          ),
+                        ]
+                    ),
+                  ),
+                  Text(
+                    FirebaseHelper.currentUser.displayName,
+                    style: Theme.of(context).textTheme.bodyText1.copyWith(
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    FirebaseHelper.currentUser.email,
+                    style: Theme.of(context).textTheme.headline6.copyWith(
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               )
           ),
         ),
@@ -46,20 +68,17 @@ class AppDrawer extends StatelessWidget {
                         icon: Icons.home,
                         pageConstructor:  HomePage(),
                       ),
-                      Divider(thickness: 2),
                       drawerEntry(
                         context,
                         title: 'License',
                         icon: Icons.description,
                         pageConstructor: LicenseView(),
                       ),
-                      Divider(thickness: 2),
                       drawerEntry(
                         context,title:'Personal info',
                         icon:Icons.person,
                         pageConstructor: DetailsPage(),
                       ),
-                      Divider(thickness: 2),
                     ],
                   )
               ),
@@ -102,12 +121,16 @@ class AppDrawer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(icon),
+            Icon(
+              icon,
+              color: Theme.of(context).textTheme.bodyText1.color,
+              size: Theme.of(context).textTheme.bodyText1.height,
+            ),
             Container(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.all(5),
               child: Text(
                 title,
-                style: Theme.of(context).textTheme.headline6.copyWith(fontWeight: FontWeight.normal),
+                style: Theme.of(context).textTheme.bodyText1.copyWith(fontWeight: FontWeight.bold),
               ),
             ),
           ]

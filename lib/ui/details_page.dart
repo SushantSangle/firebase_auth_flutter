@@ -147,12 +147,15 @@ class _DetailPageState extends State<DetailsPage> {
                   controller: email,
                   disabled: true,
                   width: width - 20,
+                  prefixIcon: Icons.email,
+                  keyboardType: TextInputType.emailAddress,
                 ),
                 TextFieldBox(
                   labelText: 'name',
                   controller: this.name,
                   disabled: !this.editMode,
                   width: width - 20,
+                  prefixIcon: Icons.person,
                 ),
                 TextFieldBox(
                   labelText: 'phone number',
@@ -161,6 +164,7 @@ class _DetailPageState extends State<DetailsPage> {
                   textValidator: Validator.number,
                   width: width - 20,
                   keyboardType: TextInputType.phone,
+                  prefixIcon: Icons.phone,
                 ),
                 TextFieldBox(
                   labelText: 'Address',
@@ -168,12 +172,14 @@ class _DetailPageState extends State<DetailsPage> {
                   disabled: !this.editMode,
                   maxLines: 3,
                   width: width - 20,
+                  prefixIcon: Icons.home,
                 ),
                 TextFieldBox(
                   labelText: 'Company',
                   controller: this.company,
                   disabled: !this.editMode,
                   width: width - 20,
+                  prefixIcon: Icons.work,
                 ),
               ],
             ),

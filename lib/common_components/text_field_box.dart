@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 class TextFieldBox extends StatelessWidget{
   String labelText;
   TextEditingController controller;
@@ -9,6 +10,8 @@ class TextFieldBox extends StatelessWidget{
   int maxLines;
   bool disabled;
   double width;
+  IconData prefixIcon;
+  Widget suffix;
   TextFieldBox({this.labelText,
     this.controller,
     this.textValidator,
@@ -17,6 +20,8 @@ class TextFieldBox extends StatelessWidget{
     this.maxLines = 1,
     this.disabled = false,
     this.width,
+    this.prefixIcon,
+    this.suffix,
   });
 
   @override
@@ -27,8 +32,9 @@ class TextFieldBox extends StatelessWidget{
         width: width ?? MediaQuery.of(context).size.width * 0.8,
         child: TextFormField(
             enabled: !disabled,
+            textAlignVertical: TextAlignVertical.center,
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            maxLines: this.maxLines,
+            maxLines: maxLines,
             readOnly: disabled,
             controller: this.controller,
             obscureText: this.obscureText,
@@ -36,6 +42,9 @@ class TextFieldBox extends StatelessWidget{
             keyboardType: keyboardType,
             decoration: InputDecoration(
               labelText: this.labelText,
+              disabledBorder: OutlineInputBorder(
+                borderSide: BorderSide.none,
+              ),
               focusedErrorBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   color: Colors.red[600],
@@ -64,6 +73,13 @@ class TextFieldBox extends StatelessWidget{
                 ),
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
+              labelStyle: TextStyle(
+                inherit: true,
+                fontSize: 20,
+              ),
+              prefixIcon: prefixIcon != null ? Icon(
+                prefixIcon,
+              ) : Container(),
             )
         ),
       ),

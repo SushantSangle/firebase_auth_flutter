@@ -73,13 +73,15 @@ class _LoginPageState extends State<LoginPage> {
                       labelText: 'email',
                       controller: username,
                       keyboardType: TextInputType.emailAddress,
-                      textValidator: (str) => Validator.email(str)
+                      textValidator: (str) => Validator.email(str),
+                      prefixIcon: Icons.email,
                     ),
                     TextFieldBox(
                       labelText: 'Password',
                       controller: password,
                       obscureText: true,
                       textValidator: (str) => Validator.password(str),
+                      prefixIcon: Icons.lock_outline,
                     ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.8,
