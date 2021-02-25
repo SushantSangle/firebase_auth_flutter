@@ -1,5 +1,6 @@
 import 'package:firebase_auth_flutter/common_components/text_field_box.dart';
 import 'package:firebase_auth_flutter/util/loading_notifier.dart';
+import 'package:firebase_auth_flutter/util/user_model.dart';
 import 'package:firebase_auth_flutter/util/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth_flutter/util/firebase_helper.dart';
@@ -41,23 +42,18 @@ class _DetailPageState extends State<DetailsPage> {
   }
 
   void assignValues() async{
-    infoFuture   = FirebaseHelper.getCurrentUserDetails();
-    try{
-      var data = await infoFuture;
-      this.setState(() {
-        name.text = data['displayName'];
-        company.text = data['company'];
-        email.text = data['email'];
-        phone.text = data['phone'];
-        address.text = data['address'];
-      });
-    }catch(e){
+    await UserModel.getCurrentUserDetails();
+    this.setState(() {
+      name.text = UserModel.displayName ?? '';
+      company.text = UserModel.company ?? '';
+      email.text = UserModel.email ?? '';
+      phone.text = UserModel.phone ?? '';
+      address.text = UserModel.address ?? '';
+    });
 
-    }
   }
   @override
   Widget build(BuildContext context) {
-
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(

@@ -78,6 +78,7 @@ class FirebaseHelper {
       );
     }catch(e){
       print(e);
+      return null;
     }
   }
 
