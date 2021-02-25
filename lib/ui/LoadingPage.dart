@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'LoginPage.dart';
 import 'package:firebase_auth_flutter/util/firebase_helper.dart';
 
+import 'main_page_view.dart';
+
 class LoadingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,7 @@ class LoadingPage extends StatelessWidget {
                 if(snapshot.data == null){
                   return LoginPage(connectionState);
                 }else{
-                  return HomePage();
+                  return MainPageView();
                 }
                 break;
             }

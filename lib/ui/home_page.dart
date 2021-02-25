@@ -13,23 +13,25 @@ class HomePage extends StatelessWidget {
         title: Text('Home page'),
         elevation: 0,
       ),
-      body: Container(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(10),
-              child: Text(
-                'Hi ${FirebaseHelper.currentUser.displayName ?? ''},\n'
-                    'Welcome to this App',
-                style: Theme.of(context).textTheme.headline4.copyWith(
-                  fontFamily: 'Nunito',
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
+      body: body(context,null,null),
     );
   }
+
+  body(context,height,width) => Container(
+    child: Column(
+      children: [
+        Container(
+          padding: EdgeInsets.all(10),
+          child: Text(
+            'Hi ${FirebaseHelper.currentUser.displayName ?? ''},\n'
+                'Welcome to this App',
+            style: Theme.of(context).textTheme.headline4.copyWith(
+              fontFamily: 'Nunito',
+            ),
+          ),
+        )
+      ],
+    ),
+  );
 
 }

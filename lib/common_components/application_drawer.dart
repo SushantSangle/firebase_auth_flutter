@@ -37,13 +37,13 @@ class AppDrawer extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    FirebaseHelper.currentUser.displayName,
+                    FirebaseHelper.currentUser.displayName ?? '',
                     style: Theme.of(context).textTheme.bodyText1.copyWith(
                       color: Colors.white,
                     ),
                   ),
                   Text(
-                    FirebaseHelper.currentUser.email,
+                    FirebaseHelper.currentUser.email ?? '',
                     style: Theme.of(context).textTheme.headline6.copyWith(
                       color: Colors.white,
                     ),
@@ -57,7 +57,6 @@ class AppDrawer extends StatelessWidget {
             child: SingleChildScrollView(
               child: Container(
                   padding: EdgeInsets.all(5),
-                  color: Colors.white,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,18 +122,17 @@ class AppDrawer extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: Theme.of(context).textTheme.bodyText1.color,
-              size: Theme.of(context).textTheme.bodyText1.height,
+              color: Theme.of(context).textTheme.headline6.color,
+              size: Theme.of(context).textTheme.headline6.height,
             ),
             Container(
               padding: EdgeInsets.all(5),
               child: Text(
                 title,
-                style: Theme.of(context).textTheme.bodyText1.copyWith(fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.headline6.copyWith(fontWeight: FontWeight.normal),
               ),
             ),
           ]
       ),
     );
-
 }

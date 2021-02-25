@@ -56,7 +56,6 @@ class _DetailPageState extends State<DetailsPage> {
   @override
   Widget build(BuildContext context) {
 
-
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -66,7 +65,7 @@ class _DetailPageState extends State<DetailsPage> {
         title: Text('User Info'),
         elevation: 0,
       ),
-      body: body(height,width),
+      body: body(context,height,width),
       floatingActionButton: ChangeNotifierProvider<LoadingNotifier>(
         create: (BuildContext context) => LoadingNotifier(),
         child: Consumer<LoadingNotifier>(
@@ -102,7 +101,7 @@ class _DetailPageState extends State<DetailsPage> {
     );
   }
 
-  body(height,width) => Column(
+  body(context,height,width) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Container(

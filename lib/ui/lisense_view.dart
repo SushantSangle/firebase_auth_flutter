@@ -12,11 +12,12 @@ class LicenseView extends StatelessWidget{
       appBar: AppBar(
         title: Text('License'),
       ),
-      body: Container(
-        child: WebView(
-          initialUrl: 'https://mit-license.org/',
-        )
-      ),
+      body: body(context, null, null),
     );
   }
+  body(context, height, width) => Container(
+      child: WebView(
+        initialUrl: 'https://mit-license.org/',
+      )
+  );
 }
