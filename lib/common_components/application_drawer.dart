@@ -6,6 +6,8 @@ import 'package:firebase_auth_flutter/ui/details_page.dart';
 import 'package:firebase_auth_flutter/ui/lisense_view.dart';
 
 class AppDrawer extends StatelessWidget {
+
+
   @override
   Widget build(BuildContext context) => Drawer(
     semanticLabel: 'Application Drawer',

@@ -35,6 +35,7 @@ class _MainPageViewState extends State<MainPageView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_availablePages[_currentPage]),
+        elevation: 0,
       ),
       drawer: AppDrawer(),
       body: PageView(

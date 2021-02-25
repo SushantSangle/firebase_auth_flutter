@@ -8,10 +8,6 @@ class LicenseView extends StatelessWidget{
   @override
   build(BuildContext context) {
     return Scaffold(
-      drawer: AppDrawer(),
-      appBar: AppBar(
-        title: Text('License'),
-      ),
       body: body(context, null, null),
     );
   }

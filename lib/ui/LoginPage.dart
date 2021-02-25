@@ -10,6 +10,8 @@ import 'package:firebase_auth_flutter/ui/signup_page.dart';
 import 'package:firebase_auth_flutter/util/validator.dart';
 import 'package:provider/provider.dart';
 
+import 'main_page_view.dart';
+
 class LoginPage extends StatefulWidget {
   LoginPage(bool connectionState,{Key key, this.title}) :
         this._connectionState = connectionState,
@@ -173,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
         if(FirebaseHelper.currentUser != null){
           Navigator.pushReplacement(context,
             MaterialPageRoute(
-                builder: (BuildContext context) => HomePage(),
+                builder: (BuildContext context) => MainPageView(),
             )
           );
           return;

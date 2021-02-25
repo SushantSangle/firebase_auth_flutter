@@ -60,11 +60,6 @@ class _DetailPageState extends State<DetailsPage> {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.blue,
-      drawer: AppDrawer(),
-      appBar: AppBar(
-        title: Text('User Info'),
-        elevation: 0,
-      ),
       body: body(context,height,width),
       floatingActionButton: ChangeNotifierProvider<LoadingNotifier>(
         create: (BuildContext context) => LoadingNotifier(),
