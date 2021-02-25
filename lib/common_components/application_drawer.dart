@@ -7,6 +7,13 @@ import 'package:firebase_auth_flutter/ui/lisense_view.dart';
 
 class AppDrawer extends StatelessWidget {
 
+  static const drawerMap = {
+    'details' : 2,
+    'home' : 1,
+    'license' : 0,
+  };
+
+  AppDrawer([pageChangeFunction]);
 
   @override
   Widget build(BuildContext context) => Drawer(
@@ -85,24 +92,6 @@ class AppDrawer extends StatelessWidget {
               ),
             )
         ),
-        Divider(height: 2),
-        Container(
-          child: drawerEntry(
-            context,
-            title: 'Logout',
-            icon: Icons.logout,
-            onPressed: () async {
-              await FirebaseHelper.signOut();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LoginPage(true),
-                ),
-              );
-
-            }
-          ),
-        )
       ],
     ),
   );

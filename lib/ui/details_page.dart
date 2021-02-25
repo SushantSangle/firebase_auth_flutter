@@ -7,6 +7,8 @@ import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth_flutter/common_components/application_drawer.dart';
 
+import 'LoginPage.dart';
+
 class DetailsPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _DetailPageState();
@@ -175,6 +177,25 @@ class _DetailPageState extends State<DetailsPage> {
                   width: width - 20,
                   prefixIcon: Icons.work,
                 ),
+                Divider(thickness: 2),
+                TextButton(
+                  onPressed: logOutConfirm,
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    child: Row(
+                      children: [
+                        Icon(Icons.logout),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          child: Text(
+                            'Logout',
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ),
               ],
             ),
           ),
@@ -182,4 +203,37 @@ class _DetailPageState extends State<DetailsPage> {
       ),
     ],
   );
+  logOutConfirm() async {
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Confirm Logout'),
+        scrollable: true,
+        content: Text('Are you sure you want to log out ?'),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: Colors.black),
+              )
+          ),
+          TextButton(
+            onPressed: logOut,
+            child: Text('Ok'),
+          ),
+        ],
+      )
+    );
+  }
+  logOut() async {
+
+    await FirebaseHelper.signOut();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoginPage(true),
+      ),
+    );
+  }
 }
