@@ -1,5 +1,5 @@
 import 'package:firebase_auth_flutter/common_components/simple_dialogue_box.dart';
-import 'package:firebase_auth_flutter/ui/home_page.dart';
+import 'package:firebase_auth_flutter/ui/pages/home_page.dart';
 import 'package:firebase_auth_flutter/util/firebase_helper.dart';
 import 'package:firebase_auth_flutter/util/loading_notifier.dart';
 import 'package:flutter/cupertino.dart';

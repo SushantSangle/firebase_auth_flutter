@@ -1,4 +1,4 @@
-import 'package:firebase_auth_flutter/ui/home_page.dart';
+import 'package:firebase_auth_flutter/ui/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'LoginPage.dart';
 import 'package:firebase_auth_flutter/util/firebase_helper.dart';

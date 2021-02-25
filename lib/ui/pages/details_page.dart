@@ -7,7 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth_flutter/common_components/application_drawer.dart';
 
-import 'LoginPage.dart';
+import '../LoginPage.dart';
 
 class DetailsPage extends StatefulWidget {
   @override

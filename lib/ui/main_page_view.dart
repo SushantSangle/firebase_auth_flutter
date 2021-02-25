@@ -1,6 +1,6 @@
-import 'package:firebase_auth_flutter/ui/details_page.dart';
-import 'package:firebase_auth_flutter/ui/home_page.dart';
-import 'package:firebase_auth_flutter/ui/lisense_view.dart';
+import 'package:firebase_auth_flutter/ui/pages/details_page.dart';
+import 'package:firebase_auth_flutter/ui/pages/home_page.dart';
+import 'package:firebase_auth_flutter/ui/pages/license_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth_flutter/common_components/application_drawer.dart';
 
@@ -15,11 +15,11 @@ class _MainPageViewState extends State<MainPageView> {
   GlobalKey _pageViewKey = GlobalKey();
   PageController _pageViewController;
   int _currentPage = 1;
-  static const _availablePages = [
-    'License',
-    'Home',
-    'Details',
-  ];
+  static const _availablePages = {
+    0 : 'License',
+    1 : 'Home',
+    2 : 'Details',
+  };
 
   @override
   void initState() {
@@ -37,7 +37,7 @@ class _MainPageViewState extends State<MainPageView> {
         title: Text(_availablePages[_currentPage]),
         elevation: 0,
       ),
-      drawer: AppDrawer(goToPage),
+      drawer: AppDrawer(goToPage,_availablePages[_currentPage]),
       body: PageView(
         key: _pageViewKey,
         controller: _pageViewController,

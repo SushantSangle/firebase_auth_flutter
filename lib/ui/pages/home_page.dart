@@ -1,6 +1,5 @@
 import 'package:firebase_auth_flutter/util/firebase_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth_flutter/common_components/application_drawer.dart';
 
 class HomePage extends StatelessWidget {
   HomePage(): super();

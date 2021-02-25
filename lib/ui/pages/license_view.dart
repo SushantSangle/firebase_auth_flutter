@@ -1,4 +1,3 @@
-import 'package:firebase_auth_flutter/common_components/application_drawer.dart';
 import 'package:firebase_auth_flutter/util/loading_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
