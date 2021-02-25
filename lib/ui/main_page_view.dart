@@ -37,7 +37,7 @@ class _MainPageViewState extends State<MainPageView> {
         title: Text(_availablePages[_currentPage]),
         elevation: 0,
       ),
-      drawer: AppDrawer(),
+      drawer: AppDrawer(goToPage),
       body: PageView(
         key: _pageViewKey,
         controller: _pageViewController,
@@ -69,15 +69,16 @@ class _MainPageViewState extends State<MainPageView> {
         backgroundColor: Colors.white60,
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.black,
-        onTap: (page) {
-          print('page:$page');
-          if( (page - _currentPage).abs() == 1)
-            _pageViewController.animateToPage(page, duration: Duration(milliseconds: 500), curve: Curves.ease);
-          else
-            _pageViewController.jumpToPage(page);
-          this.setState(() => _currentPage = page);
-        }
+        onTap: goToPage,
       ),
     );
+  }
+  void goToPage(int page) {
+    print('page:$page');
+    if( (page - _currentPage).abs() == 1)
+      _pageViewController.animateToPage(page, duration: Duration(milliseconds: 500), curve: Curves.ease);
+    else
+      _pageViewController.jumpToPage(page);
+    this.setState(() => _currentPage = page);
   }
 }

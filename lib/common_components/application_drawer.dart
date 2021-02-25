@@ -8,12 +8,12 @@ import 'package:firebase_auth_flutter/ui/lisense_view.dart';
 class AppDrawer extends StatelessWidget {
 
   static const drawerMap = {
-    'details' : 2,
-    'home' : 1,
-    'license' : 0,
+    'Details' : 2,
+    'Home' : 1,
+    'License' : 0,
   };
-
-  AppDrawer([pageChangeFunction]);
+  Function pageChangeFunction;
+  AppDrawer([this.pageChangeFunction]);
 
   @override
   Widget build(BuildContext context) => Drawer(
@@ -83,7 +83,7 @@ class AppDrawer extends StatelessWidget {
                         pageConstructor: LicenseView(),
                       ),
                       drawerEntry(
-                        context,title:'Personal info',
+                        context,title:'Details',
                         icon:Icons.person,
                         pageConstructor: DetailsPage(),
                       ),
@@ -99,7 +99,11 @@ class AppDrawer extends StatelessWidget {
 
   Widget drawerEntry(BuildContext context,{String title, IconData icon, pageConstructor,onPressed}) =>
     TextButton(
-        onPressed: onPressed ?? () {
+      onPressed: pageChangeFunction != null ?
+        () {
+          pageChangeFunction(drawerMap[title]);
+          Navigator.of(context).pop();
+        } : onPressed ?? () {
         return Navigator.pushReplacement(
           context,
           MaterialPageRoute(
