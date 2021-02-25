@@ -1,3 +1,4 @@
+import 'package:firebase_auth_flutter/util/user_model.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -35,11 +36,13 @@ class FirebaseHelper {
   }
   static Future signIn({String email, String password}) async {
     _credential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+    UserModel.getCurrentUserDetails();
     return;
   }
 
   static signOut() async{
-    return FirebaseAuth.instance.signOut();
+    await FirebaseAuth.instance.signOut();
+    UserModel.removeUser();
   }
 
   static signUp({String displayName, String email, String password, String phoneNo,String address, String company}) async{
@@ -63,6 +66,10 @@ class FirebaseHelper {
         "company" : company ?? '',
       },
     );
+    UserModel.phone = phoneNo ?? '';
+    UserModel.address = address ?? '';
+    UserModel.company = company ?? '';
+    UserModel.saveUser();
   }
 
   static Future getCurrentUserDetails() async{

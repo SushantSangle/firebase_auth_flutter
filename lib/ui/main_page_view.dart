@@ -1,6 +1,7 @@
 import 'package:firebase_auth_flutter/ui/pages/details_page.dart';
 import 'package:firebase_auth_flutter/ui/pages/home_page.dart';
 import 'package:firebase_auth_flutter/ui/pages/license_view.dart';
+import 'package:firebase_auth_flutter/util/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth_flutter/common_components/application_drawer.dart';
 
@@ -28,6 +29,7 @@ class _MainPageViewState extends State<MainPageView> {
     );
     title = _availablePages[_currentPage];
     super.initState();
+    UserModel.init();
   }
 
   @override
