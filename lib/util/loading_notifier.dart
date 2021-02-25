@@ -4,6 +4,12 @@ import 'package:flutter/material.dart';
 class LoadingNotifier extends ChangeNotifier {
   bool _loadingState = false;
   bool get loadingState => _loadingState;
+  set loadingState(state) => _loadingState = state;
+
+  @override
+  notifyListeners(){
+    super.notifyListeners();
+  }
 
   setLoading(Future future,{Function onFinished,Function onError}) async{
     _loadingState = true;
