@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth_flutter/ui/product_page.dart';
 import 'package:firebase_auth_flutter/util/firebase_helper.dart';
 import 'package:firebase_auth_flutter/util/models/data_model.dart';
 import 'package:flutter/material.dart';
@@ -63,6 +65,11 @@ class _HomePageState extends State<HomePage> {
   gridChild(context, product) => Container(
     padding: EdgeInsets.all(10),
     child: GestureDetector(
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ProductPage(product),
+        )
+      ),
       child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -93,27 +100,30 @@ class _HomePageState extends State<HomePage> {
         child: Hero(
           tag: product.id,
           child: Image(
-            image: NetworkImage(product.imageUrl) ,
-          ),
+              image: CachedNetworkImageProvider(product.imageUrl),
+          )
         ),
       ),
     ),
     Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            '${product.price}$currency',
-            style: textTheme.headline5.copyWith(
-                color: Colors.blue
+      child: Hero(
+        tag: '${product.id}details',
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '${product.price}$currency',
+              style: textTheme.headline5.copyWith(
+                  color: Colors.blue
+              ),
             ),
-          ),
-          Text(
-            product.title,
-            style: textTheme.bodyText1,
-          )
-        ],
+            Text(
+              '${product.title}\n',
+              style: textTheme.bodyText1,
+            )
+          ],
+        ),
       ),
     )
   ];
