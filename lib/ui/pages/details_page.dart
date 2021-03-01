@@ -1,6 +1,6 @@
 import 'package:firebase_auth_flutter/common_components/text_field_box.dart';
 import 'package:firebase_auth_flutter/util/loading_notifier.dart';
-import 'package:firebase_auth_flutter/util/user_model.dart';
+import 'package:firebase_auth_flutter/util/models/user_model.dart';
 import 'package:firebase_auth_flutter/util/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth_flutter/util/firebase_helper.dart';

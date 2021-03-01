@@ -107,15 +107,21 @@ class AppDrawer extends StatelessWidget {
   }
 
 
-  Widget drawerEntry(BuildContext context,{String title, IconData icon, pageConstructor,onPressed}) =>
-    Container(
-      padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
+  Widget drawerEntry(BuildContext context,{String title, IconData icon, pageConstructor,onPressed}) {
+    bool selected = (title == currentPage);
+    var textStyle = Theme.of(context).textTheme.headline6
+        .copyWith(fontWeight: FontWeight.normal);
+    if(selected){
+      textStyle = textStyle.copyWith(color: Colors.blue);
+    }
+    return Container(
+      padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
       child: TextButton(
         onPressed: pageChangeFunction != null ?
-          () {
-            pageChangeFunction(drawerMap[title]);
-            Navigator.of(context).pop();
-          } : onPressed ?? () {
+            () {
+          pageChangeFunction(drawerMap[title]);
+          Navigator.of(context).pop();
+        } : onPressed ?? () {
           return Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -125,31 +131,34 @@ class AppDrawer extends StatelessWidget {
         },
         style: ButtonStyle(
           backgroundColor:
-            MaterialStateProperty.all(title == currentPage ? Colors.blue[200] : Theme.of(context).canvasColor),
-              shape : MaterialStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.horizontal(right: Radius.circular(50
+          MaterialStateProperty.all(
+              selected ? Colors.blue[100] : Theme
+                  .of(context)
+                  .canvasColor),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+                borderRadius: BorderRadius.horizontal(right: Radius.circular(50
                 )
               )
-            )
+            ),
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20,0,0,0),
+          padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Icon(
                   icon,
-                  color: Theme.of(context).textTheme.headline6.color,
-                  size: Theme.of(context).textTheme.headline6.height,
+                  color: textStyle.color,
+                  size: textStyle.height,
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(10,0,0,0),
+                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                   child: Text(
                     title,
-                    style: Theme.of(context).textTheme.headline6.copyWith(fontWeight: FontWeight.normal),
+                    style: textStyle,
                   ),
                 ),
               ]
@@ -157,4 +166,5 @@ class AppDrawer extends StatelessWidget {
         ),
       ),
     );
+  }
 }

@@ -33,7 +33,6 @@ class TextFieldBox extends StatelessWidget{
         child: TextFormField(
             enabled: !disabled,
             textAlignVertical: TextAlignVertical.center,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
             maxLines: maxLines,
             readOnly: disabled,
             controller: this.controller,

@@ -1,4 +1,5 @@
-import 'package:firebase_auth_flutter/util/user_model.dart';
+import 'package:firebase_auth_flutter/util/models/data_model.dart';
+import 'package:firebase_auth_flutter/util/models/user_model.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -83,6 +84,28 @@ class FirebaseHelper {
           'email' : FirebaseAuth.instance.currentUser.email,
         }
       );
+    }catch(e){
+      print(e);
+      return null;
+    }
+  }
+
+  static Future getAllProducts() async {
+    try{
+      QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('products').get();
+      List<Product> products = [];
+      snapshot.docs.forEach((element) {
+        products.add(
+          Product(
+            id : element.id,
+            imageUrl : element.get('photoUrl'),
+            title: element.get('title'),
+            description: element.get('description'),
+            price: element.get('price'),
+          )
+        );
+      });
+      return products;
     }catch(e){
       print(e);
       return null;

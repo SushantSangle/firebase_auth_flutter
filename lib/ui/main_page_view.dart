@@ -1,7 +1,7 @@
 import 'package:firebase_auth_flutter/ui/pages/details_page.dart';
 import 'package:firebase_auth_flutter/ui/pages/home_page.dart';
 import 'package:firebase_auth_flutter/ui/pages/license_view.dart';
-import 'package:firebase_auth_flutter/util/user_model.dart';
+import 'package:firebase_auth_flutter/util/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth_flutter/common_components/application_drawer.dart';
 
@@ -25,6 +25,7 @@ class _MainPageViewState extends State<MainPageView> {
   @override
   void initState() {
     _pageViewController = PageController(
+      keepPage: false,
       initialPage: _currentPage,
     );
     title = _availablePages[_currentPage];
@@ -41,9 +42,9 @@ class _MainPageViewState extends State<MainPageView> {
       ),
       drawer: AppDrawer(goToPage,_availablePages[_currentPage]),
       body: PageView(
+        physics: AlwaysScrollableScrollPhysics(),
         key: _pageViewKey,
         controller: _pageViewController,
-        physics: NeverScrollableScrollPhysics(),
         children: [
           LicenseView(),
           HomePage(),
@@ -51,27 +52,38 @@ class _MainPageViewState extends State<MainPageView> {
         ],
         onPageChanged: (page) => this.setState(() => _currentPage = page ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentPage,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.description),
-            label: 'License'
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Details',
-          )
-        ],
-        elevation: 50,
-        backgroundColor: Colors.white60,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.black,
-        onTap: goToPage,
+      bottomNavigationBar: DecoratedBox(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey[400],
+              offset: Offset(0, 0),
+              blurRadius: 5,
+            )
+          ],
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _currentPage,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.description),
+              label: 'License'
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Details',
+            )
+          ],
+          elevation: 1000,
+          backgroundColor: Colors.white,
+          selectedItemColor: Colors.blue[800],
+          unselectedItemColor: Colors.grey[500],
+          onTap: goToPage,
+        ),
       ),
     );
   }

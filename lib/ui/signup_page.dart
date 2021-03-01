@@ -42,8 +42,7 @@ class SignupPageState extends State<SignupPage> {
     var str = Validator.email(email);
     if (str != null)
       return str;
-    if( _uniqueEmail == false || prevEmail == email){
-      prevEmail = email;
+    if( _uniqueEmail == false ){
       _uniqueEmail = true;
       return 'email already in use';
     }
@@ -82,19 +81,14 @@ class SignupPageState extends State<SignupPage> {
   _signUp(LoadingNotifier notifier,[skipped = false]) async{
     try {
       if (_optFormKey.currentState.validate()) {
-        notifier.setLoading(FirebaseHelper.signUp(
+        await notifier.setLoading(FirebaseHelper.signUp(
           displayName: !skipped ? username.text ?? '' : '',
           email: email.text,
           password: password.text,
           phoneNo: !skipped ? phoneNo.text ?? '' : '',
           company: !skipped ? company.text ?? '' : '',
           address: !skipped ? company.text ?? '' : '',
-        ),
-          onFinished: () {
-            Navigator.pop(context);
-            loginCallback();
-          }
-        );
+        ));
       }
     }catch(e){
       if(e.code.toString() == 'email-already-in-use'){

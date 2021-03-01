@@ -12,6 +12,7 @@ class LicenseView extends StatelessWidget{
       body: body(context, null, null),
     );
   }
+
   body(context, height, width) => Container(
       child: ChangeNotifierProvider<LoadingNotifier>(
         create: (context) => LoadingNotifier(),
