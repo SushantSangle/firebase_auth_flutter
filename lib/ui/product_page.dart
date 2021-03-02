@@ -30,6 +30,7 @@ class ProductPage extends StatelessWidget {
               Hero(
                 tag: product.id,
                 child: Image(
+                  height: MediaQuery.of(context).size.height * 0.4,
                   image: CachedNetworkImageProvider(product.imageUrl),
                   fit: BoxFit.contain,
                 ),
